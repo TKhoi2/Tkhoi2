@@ -15,19 +15,16 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
+        $incomingFields = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return redirect('/login'); 
+        $incomingFields['password'] = bcrypt($incomingFields['password']);
+        $user = User::create($incomingFields);
+        auth()->login($user);
+        return redirect('login'); 
     }
 }
 

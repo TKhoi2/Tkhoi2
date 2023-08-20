@@ -13,7 +13,7 @@ class LoginController extends Controller
 
     public function logout() {
         auth()->logout();
-        return redirect('/');
+        return redirect('login');
     }
 
     public function showLoginForm() {
@@ -21,14 +21,16 @@ class LoginController extends Controller
     }
 
     public function login(Request $request) {
-        $credentials = $request->only('email', 'password');
+        $incomingFields = $request->validate([
+            'loginname' => 'required',
+            'loginpassword' => 'required'
+        ]);
 
-        if (User::attempt($credentials)) {
-            // Đăng nhập thành công
-            return redirect('/dashboard'); // Đổi đường dẫn tùy theo yêu cầu của bạn
-        } else {
-            // Đăng nhập thất bại
-            return back()->withErrors(['message' => 'Thông tin đăng nhập không hợp lệ.']);
+        if (auth()->attempt(['name' => $incomingFields['loginname'], 'password' => $incomingFields['loginpassword']])) {
+            $request->session()->regenerate();
         }
+
+        return redirect('/');
+        
     }
 }
