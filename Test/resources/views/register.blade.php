@@ -7,6 +7,15 @@
     <title>Document</title>
 </head>
 <body>
+    @auth
+    <p>Chúc mừng bạn tạo tài khoản</p>
+    <a href="{{ route('login') }}">
+        <form action="/logout" method="POST">
+            @csrf
+            <button>Bấm vào đây để đăng nhập</button>
+        </form> 
+    </a>
+    @else
     <form method="POST" action="{{ route('register') }}">
         @csrf
     
@@ -21,6 +30,9 @@
     
         <button type="submit">Đăng ký</button>
     </form>
+    @endauth
+
+    
     
 </body>
 </html>
