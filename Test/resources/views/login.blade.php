@@ -80,19 +80,68 @@
           <button>Lưu Post</button>
         </form>
       </div>
-    
+      
       <div style="border: 3px solid black;">
-        <h2>cách post của bạn</h2>
-        @foreach($posts as $post)
+        <h2>các post đã flow</h2>
+        @foreach($Flows as $Flow)
         <div style="background-color: gray; padding: 10px; margin: 10px;">
-          <h3>{{$post['title']}} bởi {{$post->user->name}}</h3>
-          {{$post['body']}}
-          <p><a href="/edit-post/{{$post->id}}">chỉnh xửa</a></p>
-          <form action="/delete-post/{{$post->id}}" method="POST">
+          <h3>{{$Flow['title']}} bởi {{$Flow->user->name}}</h3>
+          <p>{{$Flow['body']}}</p>
+          </form>
+          <form action="/flow-post/{{$Flow->id}}" method="POST">
+            @csrf
+            @method('PATCH')
+            <button>Hủy Theo dõi</button>
+            
+          </form>
+        </div>
+        @endforeach
+      </div>
+
+
+      <div style="border: 3px solid black;">
+        <h2>các post của bạn</h2>
+        @foreach($myposts as $mypost)
+        <div style="background-color: gray; padding: 10px; margin: 10px;">
+          <h3>{{$mypost['title']}} bởi {{$mypost->user->name}}</h3>
+          {{$mypost['body']}}
+          <p><a href="/edit-post/{{$mypost->id}}">chỉnh xửa</a></p>
+          <form action="/delete-post/{{$mypost->id}}" method="POST">
             @csrf
             @method('DELETE')
             <button>Xóa bài</button>
           </form>
+        </div>
+        @endforeach
+      </div>
+
+      
+
+
+      <div style="border: 3px solid black;">
+        <h2>post của mọi người</h2> 
+        @foreach($posts as $post)
+        <div style="background-color: gray; padding: 10px; margin: 10px;">
+          <h3>{{$post['title']}} bởi {{$post->user->name}}</h3>
+          {{$post['body']}}
+          @if($post->user->id == auth()->user()->id) 
+            <p><a href="/edit-post/{{$post->id}}">chỉnh xửa</a></p>
+            <form action="/flow-post/{{$post->id}}" method="POST">
+              @csrf
+              @method('PATCH')
+              @if($post->userflowed->contains('userId', auth()->user()->id) ) 
+                <button>Hủy Theo dõi</button>
+              @else
+                <button>Theo dõi</button>
+              @endif
+              
+            </form>
+              <form action="/delete-post/{{$post->id}}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button>Xóa bài</button>
+              </form>
+          @endif
         </div>
         @endforeach
       </div>

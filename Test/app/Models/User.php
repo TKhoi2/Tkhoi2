@@ -47,4 +47,7 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'user_id');
     }
 
+    public function Flowed() {
+        return $this->belongsToMany(Post::class, 'FLOW', 'userid', 'postid');
+    }
 }

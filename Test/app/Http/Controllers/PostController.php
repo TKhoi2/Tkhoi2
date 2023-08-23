@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Flow;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -49,6 +50,19 @@ class PostController extends Controller
         $incomingFields['body'] = strip_tags($incomingFields['body']);
         $incomingFields['user_id'] = auth()->id();
         Post::create($incomingFields);
+        return redirect('/');
+    }
+
+    public function flowPost(Post $post) {
+        
+        if(auth()->user()) {
+            $flowed = Flow::where('userId', auth()->user()->id)->where('postId', $post->id)->exists();
+            if(!$flowed) {
+                Flow::create(['userId'=>auth()->user()->id, 'postId'=>$post->id]);
+            } else {
+                $flowed = Flow::where('userId', auth()->user()->id)->where('postId', $post->id)->delete();
+            }
+        } 
         return redirect('/');
     }
 }
