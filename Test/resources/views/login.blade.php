@@ -102,6 +102,16 @@
         <button>Đăng xuất</button>
     </form>
     @else
+    <nav class="navbar">
+      <div class="logo"><a href="/">RealBook</a></div>
+      <ul class="nav-links">
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact</a></li>
+      </ul>
+  </nav>
+
+    <h2>Login</h2>
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
     
