@@ -20,12 +20,17 @@ class LoginController extends Controller
         return view('login');
     }
 
+    public function showId($id) {
+        $user = User::findOrFail($id);
+        return view('login', compact('user'));
+    }
+
     public function login(Request $request) {
         $incomingFields = $request->validate([
             'loginname' => 'required',
             'loginpassword' => 'required'
         ]);
-
+        
         if (auth()->attempt(['name' => $incomingFields['loginname'], 'password' => $incomingFields['loginpassword']])) {
             $request->session()->regenerate();
         }

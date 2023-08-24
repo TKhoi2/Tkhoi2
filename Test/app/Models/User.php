@@ -50,4 +50,5 @@ class User extends Authenticatable
     public function Flowed() {
         return $this->belongsToMany(Post::class, 'FLOW', 'userid', 'postid');
     }
+    
 }
